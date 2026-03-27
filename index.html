@@ -3,199 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flypayper | Art & Custom Lighter Cases</title>
+    <title>FLYPAYPER // ARCHIVE-01</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f0f0f;
-            --accent-color: #ff3e3e;
-            --text-color: #ffffff;
-            --secondary-text: #a0a0a0;
+            --bg: #080808;
+            --accent: #e6ff00; /* Neon Volt */
+            --text: #f0f0f0;
+            --surface: #121212;
+            --transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
 
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
         }
 
-        header {
-            padding: 2rem;
-            text-align: center;
-            border-bottom: 1px solid #333;
-        }
-
-        h1 {
-            font-size: 3rem;
-            letter-spacing: -2px;
-            margin: 0;
-            text-transform: uppercase;
-        }
-
-        nav {
-            margin-top: 1rem;
-        }
-
-        nav a {
-            color: var(--secondary-text);
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--accent-color);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .hero {
-            height: 60vh;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://via.placeholder.com/1200x600?text=FLYPAYPER+FEATURED+ART') center/cover;
+        /* --- CUSTOM CURSOR --- */
+        #cursor {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease-out;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 3rem;
-            border-radius: 8px;
+        }
+        #cursor::after {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
         }
 
-        .section-title {
-            font-size: 1.5rem;
-            border-left: 4px solid var(--accent-color);
-            padding-left: 1rem;
-            margin-bottom: 2rem;
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background: #1a1a1a;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-        }
-
-        .card-img {
-            width: 100%;
-            height: 300px;
-            background: #333;
-            object-fit: cover;
-        }
-
-        .card-info {
-            padding: 1.5rem;
-        }
-
-        .price {
-            color: var(--accent-color);
-            font-weight: bold;
+        .logo {
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
             font-size: 1.2rem;
+            letter-spacing: 5px;
         }
 
-        .btn {
-            display: inline-block;
-            background: var(--accent-color);
+        .nav-links a {
             color: white;
-            padding: 0.8rem 1.5rem;
             text-decoration: none;
-            border-radius: 4px;
-            margin-top: 1rem;
-            font-weight: bold;
+            font-size: 0.8rem;
+            margin-left: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 10%;
+        }
+
+        .hero h1 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(3rem, 10vw, 8rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .hero-sub {
+            font-size: 1rem;
+            color: var(--accent);
+            letter-spacing: 10px;
+            text-transform: uppercase;
+        }
+
+        /* --- BENT-GRID CATALOG --- */
+        .catalog {
+            padding: 100px 5%;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+        }
+
+        .item {
+            position: relative;
+            background: var(--surface);
+            overflow: hidden;
+            border: 1px solid #1a1a1a;
+            transition: var(--transition);
+        }
+
+        .item:hover { border-color: var(--accent); }
+
+        .item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(1);
+            transition: var(--transition);
+            opacity: 0.6;
+        }
+
+        .item:hover img { filter: grayscale(0); opacity: 1; transform: scale(1.05); }
+
+        /* Asymmetrical Spacing */
+        .item-lg { grid-column: span 8; height: 600px; }
+        .item-sm { grid-column: span 4; height: 600px; }
+        .item-md { grid-column: span 6; height: 450px; }
+
+        .item-info {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            pointer-events: none;
+        }
+
+        .item-info h3 { font-family: 'Syncopate'; font-size: 1rem; }
+        .item-info span { font-size: 0.8rem; opacity: 0.5; }
+
+        /* --- CTA SECTION --- */
+        .cta {
+            padding: 150px 0;
+            text-align: center;
+            background: var(--accent);
+            color: black;
+        }
+
+        .cta h2 { font-size: 5vw; font-family: 'Syncopate'; }
 
         footer {
+            padding: 60px;
             text-align: center;
-            padding: 4rem 2rem;
-            color: var(--secondary-text);
-            font-size: 0.9rem;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            opacity: 0.4;
         }
+
     </style>
 </head>
 <body>
 
-<header>
-    <h1>FLYPAYPER</h1>
-    <nav>
-        <a href="#art">ART PRINTS</a>
-        <a href="#lighters">LIGHTER CASES</a>
-        <a href="#about">ABOUT</a>
-        <a href="#contact">CONTACT</a>
-    </nav>
-</header>
+<div id="cursor"></div>
 
-<div class="container">
-    <section class="hero">
-        <div style="text-align: center;">
-            <h2>NEW DROP: THE CHROME SERIES</h2>
-            <p>Limited Edition Custom Lighter Cases</p>
-            <a href="#lighters" class="btn">SHOP NOW</a>
-        </div>
-    </section>
+<nav>
+    <div class="logo">FLYPAYPER</div>
+    <div class="nav-links">
+        <a href="#">Shop</a>
+        <a href="#">Custom</a>
+        <a href="#">Insta</a>
+    </div>
+</nav>
 
-    <h2 class="section-title" id="art">ORIGINAL ART & PRINTS</h2>
-    <div class="grid">
-        <div class="card">
-            <div class="card-img" style="background: url('https://via.placeholder.com/300x400?text=ART+PIECE+1') center/cover;"></div>
-            <div class="card-info">
-                <h3>Vibrant Dreams #01</h3>
-                <p class="price">$45.00</p>
-                <a href="#" class="btn">ADD TO CART</a>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-img" style="background: url('https://via.placeholder.com/300x400?text=ART+PIECE+2') center/cover;"></div>
-            <div class="card-info">
-                <h3>Retro Flow Print</h3>
-                <p class="price">$60.00</p>
-                <a href="#" class="btn">ADD TO CART</a>
-            </div>
+<section class="hero">
+    <p class="hero-sub">Creative Syndicate</p>
+    <h1>Visual<br>Overdose</h1>
+</section>
+
+<section class="catalog">
+    <div class="item item-lg">
+        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=2000" alt="Art">
+        <div class="item-info">
+            <h3>SERIES_001_PRINT</h3>
+            <span>Original Archive / $150</span>
         </div>
     </div>
 
-    <br><br>
-
-    <h2 class="section-title" id="lighters">CUSTOM LIGHTER CASES</h2>
-    <div class="grid">
-        <div class="card">
-            <div class="card-img" style="background: url('https://via.placeholder.com/300x400?text=LIGHTER+CASE+A') center/cover;"></div>
-            <div class="card-info">
-                <h3>Hand-Painted Case</h3>
-                <p>One-of-a-kind original illustration on metal.</p>
-                <p class="price">$120.00</p>
-                <a href="#" class="btn">BUY NOW</a>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-img" style="background: url('https://via.placeholder.com/300x400?text=LIGHTER+CASE+B') center/cover;"></div>
-            <div class="card-info">
-                <h3>Custom Engraved Case</h3>
-                <p>Personalize with Flypayper motifs.</p>
-                <p class="price">$85.00</p>
-                <a href="#" class="btn">CUSTOMIZE</a>
-            </div>
+    <div class="item item-sm">
+        <img src="https://images.unsplash.com/photo-1512446816042-444d641267d4?q=80&w=1000" alt="Lighter">
+        <div class="item-info">
+            <h3>CUSTOM_CASE_V1</h3>
+            <span>Engraved Metal / $85</span>
         </div>
     </div>
-</div>
+
+    <div class="item item-md">
+        <img src="https://images.unsplash.com/photo-1633167606207-d840b5070fc2?q=80&w=1000" alt="Art">
+        <div class="item-info">
+            <h3>STREET_STUDY_04</h3>
+            <span>Digital Canvas / $95</span>
+        </div>
+    </div>
+
+    <div class="item item-md">
+        <img src="https://images.unsplash.com/photo-1549490349-8643362247b5?q=80&w=1000" alt="Apparel">
+        <div class="item-info">
+            <h3>STUDIO_LTD_TEE</h3>
+            <span>Heavyweight / $55</span>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <h2>NEED SOMETHING CUSTOM?</h2>
+    <p>DM FOR COMMISSIONS</p>
+</section>
 
 <footer>
-    <p>&copy; 2026 FLYPAYPER. ALL RIGHTS RESERVED.</p>
-    <p>FOLLOW ON INSTAGRAM: @flypayper</p>
+    EST. 2026 // FLYPAYPER DIGITAL ARCHIVE // SQUACH LABS DEPLOYMENT
 </footer>
+
+<script>
+    const cursor = document.getElementById('cursor');
+    
+    // Smooth custom cursor tracking
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.transform = `translate3d(${e.clientX - 20}px, ${e.clientY - 20}px, 0)`;
+    });
+
+    // Cursor scaling effect on links
+    const links = document.querySelectorAll('a, .item');
+    links.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+            cursor.style.transform += ' scale(2)';
+            cursor.style.backgroundColor = 'rgba(230, 255, 0, 0.1)';
+        });
+        link.addEventListener('mouseleave', () => {
+            cursor.style.transform = cursor.style.transform.replace(' scale(2)', '');
+            cursor.style.backgroundColor = 'transparent';
+        });
+    });
+</script>
 
 </body>
 </html>
