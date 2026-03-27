@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flypayper | Art & Custom Lighter Cases</title>
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --accent-color: #ff3e3e;
+            --text-color: #ffffff;
+            --secondary-text: #a0a0a0;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        h1 {
+            font-size: 3rem;
+            letter-spacing: -2px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        nav {
+            margin-top: 1rem;
+        }
+
+        nav a {
+            color: var(--secondary-text);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            height: 60vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://via.placeholder.com/1200x600?text=FLYPAYPER+FEATURED+ART') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 3rem;
+            border-radius: 8px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 300px;
+            background: #333;
+            object-fit: cover;
+        }
+
+        .card-info {
+            padding: 1.5rem;
+        }
+
+        .price {
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>FLYPAYPER</h1>
+    <nav>
+        <a href="#art">ART PRINTS</a>
+        <a href="#lighters">LIGHTER CASES</a>
+        <a href="#about">ABOUT</a>
+        <a href="#contact">CONTACT</a>
+    </nav>
+</header>
+
+<div class="container">
+    <section class="hero">
+        <div style="text-align: center;">
+            <h2>NEW DROP: THE CHROME SERIES</h2>
+            <p>Limited Edition Custom Lighter Cases</p>
+            <a href="#lighters" class="btn">SHOP NOW</a>
+        </div>
+    </section>
+
+    <h2 class="section-title" id="art">ORIGINAL ART & PRINTS</h2>
+    <div class="grid">
+        <div class="card">
+            <div class="card-img" style="background: url('https://via.placeholder.com/300x400?text=ART+PIECE+1') center/cover;"></div>
+            <div class="card-info">
+                <h3>Vibrant Dreams #01</h3>
+                <p class="price">$45.00</p>
+                <a href="#" class="btn">ADD TO CART</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-img" style="background: url('https://via.placeholder.com/300x400?text=ART+PIECE+2') center/cover;"></div>
+            <div class="card-info">
+                <h3>Retro Flow Print</h3>
+                <p class="price">$60.00</p>
+                <a href="#" class="btn">ADD TO CART</a>
+            </div>
+        </div>
+    </div>
+
+    <br><br>
+
+    <h2 class="section-title" id="lighters">CUSTOM LIGHTER CASES</h2>
+    <div class="grid">
+        <div class="card">
+            <div class="card-img" style="background: url('https://via.placeholder.com/300x400?text=LIGHTER+CASE+A') center/cover;"></div>
+            <div class="card-info">
+                <h3>Hand-Painted Case</h3>
+                <p>One-of-a-kind original illustration on metal.</p>
+                <p class="price">$120.00</p>
+                <a href="#" class="btn">BUY NOW</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-img" style="background: url('https://via.placeholder.com/300x400?text=LIGHTER+CASE+B') center/cover;"></div>
+            <div class="card-info">
+                <h3>Custom Engraved Case</h3>
+                <p>Personalize with Flypayper motifs.</p>
+                <p class="price">$85.00</p>
+                <a href="#" class="btn">CUSTOMIZE</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 FLYPAYPER. ALL RIGHTS RESERVED.</p>
+    <p>FOLLOW ON INSTAGRAM: @flypayper</p>
+</footer>
+
+</body>
+</html>
