@@ -2,247 +2,195 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FLYPAYPER // ARCHIVE-01</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FLYPAYPER MOBILE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #080808;
-            --accent: #e6ff00; /* Neon Volt */
-            --text: #f0f0f0;
-            --surface: #121212;
-            --transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            --bg: #000;
+            --accent: #00ff66; /* Electric Green */
+            --glass: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+        }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
+        body, html {
+            background: var(--bg);
+            color: #fff;
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
+            height: 100%;
         }
 
-        /* --- CUSTOM CURSOR --- */
-        #cursor {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border: 1px solid var(--accent);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.15s ease-out;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #cursor::after {
-            content: '';
-            width: 4px;
-            height: 4px;
-            background: var(--accent);
-            border-radius: 50%;
-        }
-
-        /* --- NAVIGATION --- */
-        nav {
-            position: fixed;
-            top: 0; width: 100%;
-            padding: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            mix-blend-mode: difference;
-        }
-
-        .logo {
-            font-family: 'Syncopate', sans-serif;
-            font-weight: 700;
-            font-size: 1.2rem;
-            letter-spacing: 5px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 0.8rem;
-            margin-left: 30px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
+        /* --- MOBILE SNAP CONTAINER --- */
+        .app-container {
             height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        section {
+            height: 100vh;
+            width: 100vw;
+            scroll-snap-align: start;
+            position: relative;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            padding: 0 10%;
-        }
-
-        .hero h1 {
-            font-family: 'Syncopate', sans-serif;
-            font-size: clamp(3rem, 10vw, 8rem);
-            line-height: 0.9;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
-
-        .hero-sub {
-            font-size: 1rem;
-            color: var(--accent);
-            letter-spacing: 10px;
-            text-transform: uppercase;
-        }
-
-        /* --- BENT-GRID CATALOG --- */
-        .catalog {
-            padding: 100px 5%;
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 20px;
-        }
-
-        .item {
-            position: relative;
-            background: var(--surface);
+            justify-content: flex-end;
+            padding: 30px;
             overflow: hidden;
-            border: 1px solid #1a1a1a;
-            transition: var(--transition);
         }
 
-        .item:hover { border-color: var(--accent); }
-
-        .item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(1);
-            transition: var(--transition);
-            opacity: 0.6;
-        }
-
-        .item:hover img { filter: grayscale(0); opacity: 1; transform: scale(1.05); }
-
-        /* Asymmetrical Spacing */
-        .item-lg { grid-column: span 8; height: 600px; }
-        .item-sm { grid-column: span 4; height: 600px; }
-        .item-md { grid-column: span 6; height: 450px; }
-
-        .item-info {
+        /* --- BACKGROUND MEDIA --- */
+        .bg-media {
             position: absolute;
-            bottom: 30px;
-            left: 30px;
-            pointer-events: none;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            object-fit: cover;
+            filter: brightness(0.7);
         }
 
-        .item-info h3 { font-family: 'Syncopate'; font-size: 1rem; }
-        .item-info span { font-size: 0.8rem; opacity: 0.5; }
+        /* --- UI OVERLAY --- */
+        .header {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+        }
 
-        /* --- CTA SECTION --- */
-        .cta {
-            padding: 150px 0;
+        .logo { font-family: 'Syncopate'; font-size: 14px; letter-spacing: 3px; color: var(--accent); }
+
+        .content-box {
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding-bottom: 60px;
+        }
+
+        h2 { font-size: 3rem; font-weight: 900; line-height: 0.9; text-transform: uppercase; margin-bottom: 10px; }
+        p { font-size: 0.9rem; opacity: 0.8; margin-bottom: 20px; max-width: 80%; }
+
+        /* --- ACTION BUTTONS --- */
+        .btn-group { display: flex; gap: 10px; }
+
+        .btn-main {
+            background: #fff;
+            color: #000;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 12px;
+            text-transform: uppercase;
+            flex: 1;
             text-align: center;
+        }
+
+        .btn-outline {
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        /* --- NAV BAR (BOTTOM) --- */
+        .nav-bottom {
+            position: fixed;
+            bottom: 0; width: 100%;
+            height: 60px;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 0.5px solid #333;
+            z-index: 100;
+        }
+
+        .nav-item { color: #555; font-size: 10px; text-decoration: none; text-align: center; font-weight: bold; }
+        .nav-item.active { color: var(--accent); }
+
+        /* --- ANIMATION --- */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .live-tag {
             background: var(--accent);
             color: black;
+            padding: 2px 8px;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 3px;
+            animation: pulse 2s infinite;
+            display: inline-block;
+            margin-bottom: 10px;
         }
-
-        .cta h2 { font-size: 5vw; font-family: 'Syncopate'; }
-
-        footer {
-            padding: 60px;
-            text-align: center;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            opacity: 0.4;
-        }
-
     </style>
 </head>
 <body>
 
-<div id="cursor"></div>
-
-<nav>
-    <div class="logo">FLYPAYPER</div>
-    <div class="nav-links">
-        <a href="#">Shop</a>
-        <a href="#">Custom</a>
-        <a href="#">Insta</a>
-    </div>
-</nav>
-
-<section class="hero">
-    <p class="hero-sub">Creative Syndicate</p>
-    <h1>Visual<br>Overdose</h1>
-</section>
-
-<section class="catalog">
-    <div class="item item-lg">
-        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=2000" alt="Art">
-        <div class="item-info">
-            <h3>SERIES_001_PRINT</h3>
-            <span>Original Archive / $150</span>
-        </div>
+    <div class="header">
+        <div class="logo">FLYPAYPER</div>
+        <div style="font-size: 20px;">🛒</div>
     </div>
 
-    <div class="item item-sm">
-        <img src="https://images.unsplash.com/photo-1512446816042-444d641267d4?q=80&w=1000" alt="Lighter">
-        <div class="item-info">
-            <h3>CUSTOM_CASE_V1</h3>
-            <span>Engraved Metal / $85</span>
-        </div>
+    <div class="app-container">
+        
+        <section>
+            <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1000" class="bg-media">
+            <div class="content-box">
+                <span class="live-tag">NEW DROP</span>
+                <h2>NEON<br>SERIES</h2>
+                <p>Limited run physical prints. Signed and numbered by Richard Perez.</p>
+                <div class="btn-group">
+                    <a href="#" class="btn-main">VIEW PRINTS</a>
+                    <a href="#" class="btn-outline">SHARE</a>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <img src="https://images.unsplash.com/photo-1512446816042-444d641267d4?q=80&w=1000" class="bg-media">
+            <div class="content-box">
+                <h2>ENGRAVED<br>METAL</h2>
+                <p>Custom polished chrome lighter cases with signature Flypayper motifs.</p>
+                <div class="btn-group">
+                    <a href="#" class="btn-main">CUSTOMIZE</a>
+                    <a href="#" class="btn-outline">SPECS</a>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <img src="https://images.unsplash.com/photo-1633167606207-d840b5070fc2?q=80&w=1000" class="bg-media">
+            <div class="content-box">
+                <h2>CUSTOM<br>WORK</h2>
+                <p>Have a specific vision? Book a 1-on-1 session for original canvas work.</p>
+                <div class="btn-group">
+                    <a href="#" class="btn-main">ENQUIRE</a>
+                </div>
+            </div>
+        </section>
+
     </div>
 
-    <div class="item item-md">
-        <img src="https://images.unsplash.com/photo-1633167606207-d840b5070fc2?q=80&w=1000" alt="Art">
-        <div class="item-info">
-            <h3>STREET_STUDY_04</h3>
-            <span>Digital Canvas / $95</span>
-        </div>
+    <div class="nav-bottom">
+        <a href="#" class="nav-item active">DROP</a>
+        <a href="#" class="nav-item">ARCHIVE</a>
+        <a href="#" class="nav-item">CUSTOM</a>
+        <a href="#" class="nav-item">ACCOUNT</a>
     </div>
-
-    <div class="item item-md">
-        <img src="https://images.unsplash.com/photo-1549490349-8643362247b5?q=80&w=1000" alt="Apparel">
-        <div class="item-info">
-            <h3>STUDIO_LTD_TEE</h3>
-            <span>Heavyweight / $55</span>
-        </div>
-    </div>
-</section>
-
-<section class="cta">
-    <h2>NEED SOMETHING CUSTOM?</h2>
-    <p>DM FOR COMMISSIONS</p>
-</section>
-
-<footer>
-    EST. 2026 // FLYPAYPER DIGITAL ARCHIVE // SQUACH LABS DEPLOYMENT
-</footer>
-
-<script>
-    const cursor = document.getElementById('cursor');
-    
-    // Smooth custom cursor tracking
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.transform = `translate3d(${e.clientX - 20}px, ${e.clientY - 20}px, 0)`;
-    });
-
-    // Cursor scaling effect on links
-    const links = document.querySelectorAll('a, .item');
-    links.forEach(link => {
-        link.addEventListener('mouseenter', () => {
-            cursor.style.transform += ' scale(2)';
-            cursor.style.backgroundColor = 'rgba(230, 255, 0, 0.1)';
-        });
-        link.addEventListener('mouseleave', () => {
-            cursor.style.transform = cursor.style.transform.replace(' scale(2)', '');
-            cursor.style.backgroundColor = 'transparent';
-        });
-    });
-</script>
 
 </body>
 </html>
