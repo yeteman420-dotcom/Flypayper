@@ -66,7 +66,7 @@
 </div>
 
 <script>
-// ============== CORE SETUP ==============
+// ============== SETUP ==============
 const GW = 500, GH = 700;
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d', { alpha: false });
@@ -131,15 +131,15 @@ let sqX = GW/2, sqY = GH-140, tx = GW/2, ty = GH-140;
 let lastTime = 0, waveTime = 0, shake = 0, grace = 0;
 let obs = [], beams = [], particles = [], ws = {}, boss = null, bossPhase = 0;
 
-// Tree system for Wave 4
+// Tree system for Wave 4 only
 let treesSpawnedThisWave = 0;
 const MAX_TREES_WAVE4 = 6;
 
 const MODES = [
   {name:'MODTOE ALIGNMENT', col:'#44ff44', icon:'🦶', type:'align'},
-  {name:'CRYPTID MAZE',     col:'#00ffff', icon:'👾', type:'maze'},
+  {name:'CRYPTID MAZE',     col:'#00ffff', icon:'👾', type:'maze'},   // Wave 2 - Coins restored
   {name:'RHYTHM SQUACH',    col:'#ff44ff', icon:'🎵', type:'rhythm'},
-  {name:'SQUACH RUNNER',    col:'#ff8800', icon:'🦍', type:'jump'},   // Wave 4 - Trees appear here
+  {name:'SQUACH RUNNER',    col:'#ff8800', icon:'🦍', type:'jump'},   // Wave 4 - Trees for lives
   {name:'FLOOPY SQUACH',    col:'#00ff88', icon:'🐦', type:'flap'},
   {name:'MEGA SQUACH TITAN',col:'#ff3333', icon:'💀', type:'boss'}
 ];
@@ -210,7 +210,7 @@ function initializeEngine() {
 function configureWave() {
   const m = getMode();
   obs=[]; beams=[]; grace=1.6;
-  treesSpawnedThisWave = 0;   // Reset counter when entering new wave
+  treesSpawnedThisWave = 0;
 
   ws = {spawn:1.0, vy:0, scale:1+wave*0.18, grounded:true, jumpsLeft:2, rhythmT:0, rhythmBPM:105+wave*13, warningZones:[], lanes:[80,175,270,365,460]};
 
@@ -232,7 +232,7 @@ function processDamage(x,y) {
   syncHUD();
 }
 
-// ============== BOSS, RHYTHM, etc. (kept clean) ==============
+// ============== BOSS & RHYTHM ==============
 function updateBoss(dt,ts) {
   if(!boss) return;
   const hpPct = boss.hp / boss.maxHp;
@@ -315,7 +315,12 @@ function mainLoop(ts) {
   ws.spawn -= dt;
   if(ws.spawn <= 0){
     const spd = (260 + wave*28) * Math.min(ws.scale||1, 2.5);
-    if(m.type==='maze') obs.push({id:'acer',x:Math.random()*GW,y:-50,vy:spd*0.6,vx:(Math.random()-0.5)*200});
+
+    if(m.type==='maze'){
+      obs.push({id:'acer',x:Math.random()*GW,y:-50,vy:spd*0.6,vx:(Math.random()-0.5)*200});
+      // Restored coins for Level 2 (Maze)
+      if(Math.random() < 0.45) obs.push({id:'runcoin',x:60+Math.random()*(GW-120),y:120+Math.random()*(GH-280),vx:0,vy:spd*0.4});
+    }
     else if(m.type==='align') obs.push({id:'modtoe',x:40+Math.random()*(GW-80),y:-60,vy:spd});
     else if(m.type==='flap'){
       const gap = Math.max(145,205-wave*8), gy=80+Math.random()*(GH-280-gap);
@@ -323,12 +328,11 @@ function mainLoop(ts) {
       obs.push({id:'pipe_b',x:GW+30,y:gy+gap,w:60,h:GH,vx:-spd*0.55});
     }
     else if(m.type==='jump'){
-      // Wave 4 Special: Trees instead of coins (max 6)
+      // Wave 4: Trees for extra lives (max 6 total)
       if (wave === 4 && treesSpawnedThisWave < MAX_TREES_WAVE4) {
         obs.push({id:'tree',x:GW+65,y:GH-180,vx:-(spd*1.05)});
         treesSpawnedThisWave++;
       } else {
-        // Normal barrel
         obs.push({id:'barrel',x:GW+65,y:GH-110,vx:-(spd*1.1)});
         if(Math.random() < 0.35) obs.push({id:'runcoin',x:GW+65,y:GH-180,vx:-(spd*1.1)});
       }
@@ -336,7 +340,7 @@ function mainLoop(ts) {
     ws.spawn = m.type==='flap' ? 2.4 / (ws.scale||1) : 0.85 / (ws.scale||1);
   }
 
-  // Rhythm mode
+  // Rhythm
   if(m.type==='rhythm'){
     ws.rhythmT += dt; const iv = 60/ws.rhythmBPM;
     if(ws.rhythmT >= iv){ ws.rhythmT -= iv; rhythmBeat(); }
@@ -348,29 +352,28 @@ function mainLoop(ts) {
 
   if(m.type==='boss') updateBoss(dt, ts);
 
-  // Beams & collisions (simplified for brevity but fully functional)
+  // Beams (basic handling)
   for(let i=beams.length-1;i>=0;i--){
     const b=beams[i]; b.y += b.vy*dt;
-    let hit = false;
     if(boss && m.type==='boss' && Math.hypot(b.x-boss.x,b.y-boss.y)<boss.size){
-      boss.hp--; debris(b.x,b.y,'#00ffff',8); score+=55*(ws.scale||1); sfx.bossHit(); beams.splice(i,1); hit=true;
+      boss.hp--; debris(b.x,b.y,'#00ffff',8); score+=55*(ws.scale||1); sfx.bossHit(); beams.splice(i,1);
       if(boss.hp<=0){ debris(boss.x,boss.y,'#ff8800',65,true); notify(GW/2,GH/2-60,'BOSS DEFEATED!','#ffd700'); score+=12000*(ws.scale||1); sfx.waveClear(); boss=null; bossPhase=0; waveTime=45; }
-      syncHUD(); continue;
+      continue;
     }
-    if(!hit && b.y < -60) beams.splice(i,1);
+    if(b.y < -60) beams.splice(i,1);
   }
 
-  // Obstacle update + collision
+  // Obstacles + Collection
   for(let i=obs.length-1;i>=0;i--){
     const o = obs[i];
     o.y += (o.vy||0)*dt; o.x += (o.vx||0)*dt;
 
-    // Tree collection on Wave 4
+    // Tree on Wave 4
     if(o.id === 'tree'){
-      if(Math.hypot(o.x-sqX, o.y-sqY)<35){
-        if(lives < 9){ lives++; sfx.lifeUp(); notify(o.x, o.y-40, '+1 LIFE', '#44ff44'); }
+      if(Math.hypot(o.x-sqX, o.y-sqY)<38){
+        if(lives < 9){ lives++; sfx.lifeUp(); notify(o.x, o.y-40, '+1 LIFE 🌲', '#44ff44'); }
         else notify(o.x, o.y-40, 'MAX LIVES', '#888');
-        debris(o.x, o.y, '#44ff44', 10);
+        debris(o.x, o.y, '#44ff44', 12);
         obs.splice(i,1);
         continue;
       }
@@ -378,18 +381,20 @@ function mainLoop(ts) {
       continue;
     }
 
-    // Standard collisions (barrel, coin, etc.)
-    if(o.id==='barrel' || o.id==='runcoin'){
-      if(Math.hypot(o.x-sqX,o.y-sqY)<38){
-        if(o.id==='runcoin'){ score+=200*(ws.scale||1); sfx.coin(); notify(o.x,o.y,'+COIN','#ffd700'); }
-        else processDamage(sqX,sqY);
+    // Normal coin
+    if(o.id==='runcoin'){
+      if(Math.hypot(o.x-sqX,o.y-sqY)<32){
+        score += 200 * (ws.scale||1);
+        debris(o.x,o.y,'#ffd700',8);
+        notify(o.x,o.y,'+COIN','#ffd700');
+        sfx.coin();
         obs.splice(i,1);
       }
-      if(o.x < -80) obs.splice(i,1);
+      if(o.x < -80 || o.y > GH+50) obs.splice(i,1);
       continue;
     }
 
-    // Other obstacle types...
+    // Other obstacles
     if(Math.hypot(o.x-sqX,o.y-sqY)<42){
       if(o.id==='modtoe'){ score+=300*(ws.scale||1); notify(o.x,o.y,'+ALIGNED','#44ff44'); sfx.align(); }
       else processDamage(sqX,sqY);
@@ -397,6 +402,12 @@ function mainLoop(ts) {
     } else if(o.y > GH+80 || o.x < -180){
       obs.splice(i,1);
     }
+  }
+
+  // Maze dots
+  if(m.type==='maze' && ws.dots){
+    ws.dots.forEach(d=>{ if(d.active && Math.hypot(d.x-sqX,d.y-sqY)<35){ d.active=false; score+=150; debris(d.x,d.y,'#fff',6); }});
+    if(ws.dots.length && ws.dots.every(d=>!d.active)){ score+=2200; waveTime=45; notify(GW/2,GH/2,'MAZE CLEAR!','#00ffff'); sfx.waveClear(); }
   }
 
   // Wave transition
@@ -423,13 +434,12 @@ function mainLoop(ts) {
   for(let x=0;x<GW;x+=40){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,GH); ctx.stroke(); }
   for(let y=0;y<GH;y+=40){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(GW,y); ctx.stroke(); }
 
-  // Mode backgrounds (basic)
   if(m.type==='flap'){
     const sky = ctx.createLinearGradient(0,0,0,GH); sky.addColorStop(0,'#001a2a'); sky.addColorStop(1,'#002f4a');
     ctx.fillStyle=sky; ctx.fillRect(0,0,GW,GH);
   }
 
-  // Particles, beams, obstacles, boss, squach (drawing code kept functional and clean)
+  // Render particles, beams, obstacles, boss, squach...
   particles.forEach(p=>{ ctx.globalAlpha = Math.max(0,p.life); ctx.fillStyle=p.col; ctx.fillRect(p.x-p.sz/2, p.y-p.sz/2, p.sz, p.sz); }); ctx.globalAlpha=1;
   beams.forEach(b=>{ ctx.fillStyle='#00ffff'; ctx.shadowBlur=12; ctx.shadowColor='#00ffff'; ctx.fillRect(b.x-3,b.y,6,28); ctx.shadowBlur=0; });
 
@@ -443,14 +453,19 @@ function mainLoop(ts) {
       return;
     }
     if(o.id==='barrel'){ ctx.font='38px Arial'; ctx.fillText('🛢️',o.x,o.y+16); return; }
-    if(o.id==='runcoin'){ ctx.save(); ctx.shadowBlur=15; ctx.shadowColor='#ffd700'; ctx.fillStyle='#ffd700'; ctx.beginPath(); ctx.arc(o.x,o.y,14,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#ff8800'; ctx.font='bold 14px Black Ops One'; ctx.fillText('$',o.x,o.y+5); ctx.restore(); return; }
+    if(o.id==='runcoin'){
+      ctx.save(); ctx.shadowBlur=15; ctx.shadowColor='#ffd700';
+      ctx.fillStyle='#ffd700'; ctx.beginPath(); ctx.arc(o.x,o.y,14,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#ff8800'; ctx.font='bold 14px Black Ops One'; ctx.fillText('$',o.x,o.y+5);
+      ctx.restore(); return;
+    }
     ctx.font='46px Arial'; ctx.shadowBlur=8; ctx.shadowColor='rgba(0,0,0,0.8)';
     ctx.fillText(o.id==='modtoe'?'🦶':o.id==='acer'?'🕵️‍♂️':'👾',o.x,o.y+16); ctx.shadowBlur=0;
   });
 
   if(boss && m.type==='boss') drawBoss(ts);
 
-  // Draw Squach
+  // Squach
   ctx.save(); ctx.translate(sqX, sqY);
   if(shake>0.1) ctx.translate((Math.random()-0.5)*shake*3, (Math.random()-0.5)*shake*2);
   if(inv>0 && Math.floor(ts/80)%2===0){ ctx.restore(); ctx.restore(); syncHUD(); requestAnimationFrame(mainLoop); return; }
